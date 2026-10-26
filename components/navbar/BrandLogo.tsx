@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 interface BrandLogoProps {
   className?: string;
   size?: "sm" | "md" | "lg";
@@ -9,10 +7,19 @@ export function BrandLogo({ className = "", size = "md" }: BrandLogoProps) {
   const iconSize = size === "sm" ? "w-8 h-8" : size === "lg" ? "w-11 h-11" : "w-9 h-9";
   const titleSize = size === "sm" ? "text-base" : size === "lg" ? "text-xl" : "text-lg";
 
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const target = document.getElementById("inicio");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <Link
+    <a
       href="#inicio"
-      className={`group flex items-center gap-3 transition-transform hover:scale-[1.01] ${className}`}
+      onClick={handleClick}
+      className={`group flex items-center gap-3 transition-transform hover:scale-[1.01] cursor-pointer ${className}`}
       id="brand-logo"
     >
       {/* Icon with orange-amber gradient & paw-medical mark */}
@@ -72,6 +79,6 @@ export function BrandLogo({ className = "", size = "md" }: BrandLogoProps) {
           Software Veterinario
         </span>
       </div>
-    </Link>
+    </a>
   );
 }

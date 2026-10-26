@@ -1,6 +1,10 @@
 import { TopBanner } from "@/components/navbar/TopBanner";
 import { Navbar } from "@/components/navbar/Navbar";
 import { FeaturesSection } from "@/components/features/FeaturesSection";
+import { ClinicsSection } from "@/components/sections/ClinicsSection";
+import { OwnersSection } from "@/components/sections/OwnersSection";
+import { PricingSection } from "@/components/sections/PricingSection";
+import { ContactSection } from "@/components/sections/ContactSection";
 import {
   PawPrint,
   HeartPulse,
@@ -27,7 +31,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <main className="flex-1" id="inicio">
+      <main className="flex-1 scroll-mt-24" id="inicio">
         <section className="relative overflow-hidden pt-12 pb-24 lg:pt-20 lg:pb-32">
           {/* Subtle brand ambient glow backgrounds */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] pointer-events-none -z-10">
@@ -260,6 +264,18 @@ export default function Home() {
 
         {/* Core Features & Services Section */}
         <FeaturesSection />
+
+        {/* Section: Clínicas y Consultorios */}
+        <ClinicsSection />
+
+        {/* Section: Tutores de Mascotas */}
+        <OwnersSection />
+
+        {/* Section: Planes y Precios */}
+        <PricingSection />
+
+        {/* Section: Contacto y Soporte */}
+        <ContactSection />
       </main>
 
       {/* Footer */}
