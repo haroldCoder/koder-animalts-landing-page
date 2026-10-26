@@ -1,5 +1,6 @@
 import { TopBanner } from "@/components/navbar/TopBanner";
 import { Navbar } from "@/components/navbar/Navbar";
+import { FeaturesSection } from "@/components/features/FeaturesSection";
 import {
   PawPrint,
   HeartPulse,
@@ -256,6 +257,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Core Features & Services Section */}
+        <FeaturesSection />
       </main>
 
       {/* Footer */}
