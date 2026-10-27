@@ -1,145 +1,93 @@
 "use client";
 
-import { useState } from "react";
 import { Check, Sparkles, MessageCircle, ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const WHATSAPP_NUMBER = "573006397804";
 
-type BillingCycle = "monthly" | "semiannual" | "annual";
-
-interface PlanTier {
+interface PricingPlan {
   id: string;
   name: string;
-  description: string;
+  amount: string;
+  periodLabel: string;
+  monthlyEquivalent?: string;
+  savingsNote: string;
+  badge?: string;
+  badgeColor?: "emerald" | "orange";
   popular?: boolean;
-  prices: {
-    monthly: { amount: string; periodLabel: string; billingNote: string };
-    semiannual: { amount: string; periodLabel: string; billingNote: string; badge: string };
-    annual: { amount: string; periodLabel: string; billingNote: string; badge: string };
-  };
+  description: string;
   features: string[];
   ctaText: string;
 }
 
-const PLANS: PlanTier[] = [
+const PLANS: PricingPlan[] = [
   {
-    id: "consultorio",
-    name: "Plan Consultorio",
-    description: "Para médicos veterinarios independientes o consultorios individuales con disponibilidad 24/7.",
-    prices: {
-      monthly: {
-        amount: "$119.000",
-        periodLabel: "/ mes",
-        billingNote: "Facturación mes a mes sin permanencia",
-      },
-      semiannual: {
-        amount: "$99.000",
-        periodLabel: "/ mes",
-        billingNote: "Facturado $594.000 COP cada 6 meses",
-        badge: "Ahorra 17%",
-      },
-      annual: {
-        amount: "$89.000",
-        periodLabel: "/ mes",
-        billingNote: "Facturado $1.068.000 COP al año (2 meses gratis)",
-        badge: "Ahorra 25%",
-      },
-    },
+    id: "mensual",
+    name: "Mensual",
+    amount: "$120.000",
+    periodLabel: "/ mes",
+    savingsNote: "Facturación mes a mes sin cláusulas de permanencia",
+    badge: "Flexibilidad Total",
+    badgeColor: "emerald",
+    description: "Ideal para veterinarias o consultorios que prefieren pagar mes a mes con total libertad.",
     features: [
-      "Hasta 300 pacientes y tutores registrados",
-      "Creación y visualización de historias clínicas digitales",
-      "Agenda médica y control de citas del día",
-      "Base de datos protegida con copias de seguridad continuas",
-      "Descarga de fórmulas y recetas médicas en PDF",
-      "Soporte técnico y atención personalizada por WhatsApp",
-    ],
-    ctaText: "Pedir Plan Consultorio por WhatsApp",
-  },
-  {
-    id: "clinica-pro",
-    name: "Plan Clínica Pro",
-    description: "Para clínicas veterinarias con equipo médico, varios consultorios y alta rotación de pacientes.",
-    popular: true,
-    prices: {
-      monthly: {
-        amount: "$219.000",
-        periodLabel: "/ mes",
-        billingNote: "Facturación mes a mes sin cláusulas de permanencia",
-      },
-      semiannual: {
-        amount: "$189.000",
-        periodLabel: "/ mes",
-        billingNote: "Facturado $1.134.000 COP cada 6 meses",
-        badge: "Ahorra 14%",
-      },
-      annual: {
-        amount: "$169.000",
-        periodLabel: "/ mes",
-        billingNote: "Facturado $2.028.000 COP al año (Ahorras $600.000)",
-        badge: "Ahorra 23%",
-      },
-    },
-    features: [
+      "Acceso completo a la plataforma Koder Animalts",
       "Pacientes y tutores ilimitados",
-      "Módulo en vivo de solicitudes de citas (Aprobar / Rechazar)",
+      "Historias clínicas digitales completas y recetas en PDF",
+      "Agenda médica y control de citas del día",
       "Portal móvil y web para tutores de pacientes",
-      "Ficha médica con generación de avatar de mascota por IA",
-      "Almacenamiento seguro en la nube para exámenes y ecografías",
-      "Historial clínico continuo con formato narrativo (Tell-History)",
-      "Hasta 5 doctores o consultorios simultáneos",
-      "Monitoreo 24/7 y mantenimiento continuo de infraestructura",
+      "Copias de seguridad automáticas y base de datos protegida",
     ],
-    ctaText: "Activar Clínica Pro por WhatsApp",
+    ctaText: "Pedir Plan Mensual por WhatsApp",
   },
   {
-    id: "red-hospitalaria",
-    name: "Plan Red Hospitalaria",
-    description: "Para clínicas 24 horas, centros de especialidades quirúrgicas o múltiples sucursales.",
-    prices: {
-      monthly: {
-        amount: "$449.000",
-        periodLabel: "/ mes",
-        billingNote: "Facturación mes a mes sin permanencia",
-      },
-      semiannual: {
-        amount: "$389.000",
-        periodLabel: "/ mes",
-        billingNote: "Facturado $2.334.000 COP cada 6 meses",
-        badge: "Ahorra 13%",
-      },
-      annual: {
-        amount: "$349.000",
-        periodLabel: "/ mes",
-        billingNote: "Facturado $4.188.000 COP al año (Ahorras $1.200.000)",
-        badge: "Ahorra 22%",
-      },
-    },
+    id: "semestral",
+    name: "Semestral",
+    amount: "$648.000",
+    periodLabel: "/ 6 meses",
+    monthlyEquivalent: "≈ $108.000/mes",
+    savingsNote: "Pago único cada 6 meses · Ahorras $72.000 (10% OFF)",
+    badge: "Ahorra 10%",
+    badgeColor: "orange",
+    popular: true,
+    description: "La opción más elegida por clínicas veterinarias en crecimiento que buscan estabilidad y ahorro.",
     features: [
-      "Múltiples clínicas y sedes interconectadas",
-      "Doctores, recepcionistas y auxiliares ilimitados",
-      "Gestión de turnos de quirófano, cirugía y urgencias 24/7",
-      "Analítica avanzada de citas realizadas y productividad médica",
-      "Migración asistida de bases de datos desde tu software anterior",
-      "Servidores redundantes con alta disponibilidad (99.9% uptime)",
-      "Asesor dedicado y soporte prioritario directo por WhatsApp",
+      "Todo lo incluido en el Plan Mensual",
+      "Ahorro inmediato del 10% frente al pago mensual",
+      "Tarifa preferencial equivalente a ≈ $108.000/mes",
+      "Parametrización y configuración guiada de tu veterinaria",
+      "Almacenamiento seguro en la nube para exámenes y archivos",
     ],
-    ctaText: "Cotizar Red Hospitalaria por WhatsApp",
+    ctaText: "Pedir Plan Semestral por WhatsApp",
+  },
+  {
+    id: "anual",
+    name: "Anual",
+    amount: "$1.152.000",
+    periodLabel: "/ año",
+    monthlyEquivalent: "≈ $96.000/mes",
+    savingsNote: "Pago único anual · Ahorras $288.000 (20% OFF)",
+    badge: "Mayor Ahorro · 20% OFF",
+    badgeColor: "orange",
+    description: "La inversión más inteligente para clínicas que buscan el costo mensual más bajo y máxima rentabilidad.",
+    features: [
+      "Todo lo incluido en el Plan Semestral",
+      "Mayor ahorro del año: pagas el equivalente a ≈ $96.000/mes",
+      "Ahorro total de $288.000 (más de 2 meses gratis)",
+      "Migración asistida de bases de datos desde tu software anterior",
+      "Infraestructura cloud dedicada con alta disponibilidad 99.9%",
+      "Acceso prioritario a nuevos módulos y actualizaciones",
+    ],
+    ctaText: "Pedir Plan Anual por WhatsApp",
   },
 ];
 
 export function PricingSection() {
-  const [cycle, setCycle] = useState<BillingCycle>("annual");
-
-  const cycleNames: Record<BillingCycle, string> = {
-    monthly: "Mensual",
-    semiannual: "Semestral (6 Meses)",
-    annual: "Anual (12 Meses)",
-  };
-
-  const getWhatsAppLink = (planName: string, amount: string) => {
-    const cycleText = cycleNames[cycle];
-    const message = `¡Hola! Me interesa el *${planName}* de Koder Animalts (${amount} COP en ciclo ${cycleText}). Deseo recibir información para implementarlo en mi veterinaria.`;
+  const getWhatsAppLink = (plan: PricingPlan) => {
+    const priceDetail = plan.monthlyEquivalent
+      ? `${plan.amount} COP (${plan.monthlyEquivalent})`
+      : `${plan.amount} COP/mes`;
+    const message = `¡Hola! Me interesa el plan *${plan.name}* de Koder Animalts (${priceDetail}). Deseo recibir información para implementarlo en mi veterinaria.`;
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   };
 
@@ -153,97 +101,56 @@ export function PricingSection() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
+        <div className="text-center max-w-2xl mx-auto mb-14">
           <Badge variant="secondary" className="mb-4">
             <Sparkles className="w-3.5 h-3.5 mr-1 text-[#ff6a2b]" />
-            Planes y Precios Reales en Pesos Colombianos
+            Planes y Precios Claros en Pesos Colombianos
           </Badge>
           <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white mb-4">
             La inversión que se paga sola con cada cita recuperada
           </h2>
           <p className="text-base text-slate-600 dark:text-slate-300">
-            Infraestructura cloud en alta disponibilidad 24/7, base de datos respaldada y soporte directo por WhatsApp:
+            Elige la modalidad de pago que mejor se ajuste a tu veterinaria. Acceso completo al sistema, datos protegidos en la nube e infraestructura en alta disponibilidad 24/7.
           </p>
-        </div>
-
-        {/* 3-Tier Billing Cycle Selector (Mes, 6 Meses, Anual) */}
-        <div className="flex justify-center mb-14">
-          <div className="inline-flex p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-inner">
-            <button
-              type="button"
-              onClick={() => setCycle("monthly")}
-              className={`px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                cycle === "monthly"
-                  ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-              }`}
-            >
-              Mensual
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setCycle("semiannual")}
-              className={`relative px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                cycle === "semiannual"
-                  ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-              }`}
-            >
-              <span>6 Meses</span>
-              <span className="hidden sm:inline-block text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-400">
-                Ahorro
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setCycle("annual")}
-              className={`relative px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                cycle === "annual"
-                  ? "bg-white dark:bg-slate-800 text-[#ff6a2b] shadow-xs"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-              }`}
-            >
-              <span>Anual</span>
-              <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-orange-100 dark:bg-orange-950 text-[#ff6a2b]">
-                2 meses gratis
-              </span>
-            </button>
-          </div>
         </div>
 
         {/* Pricing Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
           {PLANS.map((plan) => {
-            const currentPricing = plan.prices[cycle];
             const isPopular = plan.popular;
-            const waHref = getWhatsAppLink(plan.name, currentPricing.amount);
+            const waHref = getWhatsAppLink(plan);
 
             return (
               <div
                 key={plan.id}
                 className={`relative rounded-3xl p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 ${
                   isPopular
-                    ? "bg-white dark:bg-slate-900 border-2 border-[#ff6a2b] shadow-xl shadow-orange-500/10 scale-[1.02]"
+                    ? "bg-white dark:bg-slate-900 border-2 border-[#ff6a2b] shadow-xl shadow-orange-500/10 md:scale-[1.03] z-10"
                     : "bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 hover:border-orange-200 dark:hover:border-slate-700"
                 }`}
               >
                 {/* Popular Ribbon */}
                 {isPopular && (
-                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-gradient-to-r from-[#ff6a2b] to-[#f59e0b] text-white text-[11px] font-bold shadow-xs tracking-wide">
-                    MÁS POPULAR · MEJOR VALOR
+                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-gradient-to-r from-[#ff6a2b] to-[#f59e0b] text-white text-[11px] font-bold shadow-xs tracking-wide uppercase">
+                    Más Elegido · Recomendado
                   </span>
                 )}
 
                 <div>
+                  {/* Plan Name & Badge */}
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                    <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                       {plan.name}
                     </h3>
-                    {"badge" in currentPricing && (
-                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
-                        {currentPricing.badge}
+                    {plan.badge && (
+                      <span
+                        className={`text-[11px] font-bold px-2.5 py-1 rounded-md ${
+                          plan.badgeColor === "orange"
+                            ? "bg-orange-100 dark:bg-orange-950/70 text-[#ff6a2b] dark:text-orange-400"
+                            : "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400"
+                        }`}
+                      >
+                        {plan.badge}
                       </span>
                     )}
                   </div>
@@ -254,19 +161,29 @@ export function PricingSection() {
 
                   {/* Price display with COP currency */}
                   <div className="mb-2">
-                    <div className="flex items-baseline gap-1.5">
+                    <div className="flex items-baseline gap-1.5 flex-wrap">
                       <span className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-                        {currentPricing.amount}
+                        {plan.amount}
                       </span>
                       <span className="text-xs font-bold text-slate-500 uppercase">
                         COP
                       </span>
-                      <span className="text-xs text-slate-500">
-                        {currentPricing.periodLabel}
+                      <span className="text-xs text-slate-500 font-medium">
+                        {plan.periodLabel}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-                      {currentPricing.billingNote}
+
+                    {/* Monthly equivalent indicator (semiannual & annual) */}
+                    {plan.monthlyEquivalent && (
+                      <div className="mt-2">
+                        <span className="inline-flex items-center text-xs font-extrabold px-2 py-0.5 rounded-md bg-orange-50 dark:bg-orange-950/50 text-[#ff6a2b] dark:text-orange-400 border border-orange-200/60 dark:border-orange-900/50">
+                          {plan.monthlyEquivalent}
+                        </span>
+                      </div>
+                    )}
+
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2">
+                      {plan.savingsNote}
                     </p>
                   </div>
 
@@ -309,7 +226,7 @@ export function PricingSection() {
                   </a>
                   <p className="text-[10px] text-center text-slate-400 mt-2 flex items-center justify-center gap-1">
                     <ShieldCheck className="w-3 h-3 text-emerald-500" />
-                    Atención inmediata: +57 300 639 7804
+                    Activación inmediata: +57 300 639 7804
                   </p>
                 </div>
               </div>
